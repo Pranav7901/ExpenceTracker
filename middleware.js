@@ -4,5 +4,5 @@ export default clerkMiddleware();
 
 export const config = {
   matcher: "/((?!_next|.*\\..*|api/.*).*)",
-  runtime: "edge",
+  runtime: "experimental-edge", // Use experimental-edge
 };
