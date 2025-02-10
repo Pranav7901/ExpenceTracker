@@ -5,7 +5,7 @@ export default function middleware(req) {
   try {
     return clerkMiddleware()(req);
   } catch (error) {
-    console.error("Clerk Middleware Error:", error);
+    console.error("🚨 Clerk Middleware Error:", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
