@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
+import Loading from "../components/Loading"
 
 interface PricingCardProps {
   title: string;
@@ -15,6 +16,7 @@ interface PricingCardProps {
   phone?: string;
 }
 
+
 const PricingCard = ({
   title,
   price,
@@ -24,12 +26,13 @@ const PricingCard = ({
 }: PricingCardProps) => {
   const { user, isLoaded, isSignedIn } = useUser();
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const toggleModal = () => {
     setIsOpen((prev) => !prev);
   };
 
   const handlePayment = async () => {
+      setIsLoading(true);
     if (!isSignedIn) {
       toggleModal(); // Open modal if user is not signed in
       return;
@@ -73,6 +76,7 @@ const PricingCard = ({
         description: title,
         order_id: order.id,
         handler: function (response: any) {
+          setIsLoading(false);
           alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
         },
         prefill: {
@@ -83,6 +87,11 @@ const PricingCard = ({
         theme: {
           color: isPopular ? "#000000" : "#ffffff",
         },
+        modal: {
+          ondismiss: function () {
+            setIsLoading(false); // Hide loader if user closes the Razorpay popup
+          }
+        }
       };
 
       const rzp = new (window as any).Razorpay(options); // Access Razorpay from the global window object
@@ -95,7 +104,7 @@ const PricingCard = ({
 
   return (
     <div>
-      {/* Modal for sign-in alert */}
+      {isLoading && <Loading/>}
       {isOpen && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded shadow-lg max-w-sm w-full">

@@ -77,7 +77,7 @@ const ContactForm = () => {
       </div>
       <Button
         type="submit"
-        className="w-full bg-zinc-800 hover:bg-zinc-700 transition-colors"
+        className="w-full bg-white hover:bg-zinc-700 transition-colors"
         onClick={handleSubmit}
       >
         Send Message
